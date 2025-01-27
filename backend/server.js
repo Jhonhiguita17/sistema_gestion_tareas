@@ -1,30 +1,17 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+// backend/server.js
+
+const express = require("express");
+const cors = require("cors");
+const tareasRoutes = require("./routes/tareas");
 
 const app = express();
+const port = 5000;
 
-// Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // Para parsear el cuerpo de las solicitudes POST y DELETE
 
-// Conectar a MongoDB
-mongoose.connect('mongodb://localhost:27017/gestionar-tareas', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+app.use("/api/tareas", tareasRoutes); // Rutas de tareas
 
-mongoose.connection.once('open', () => {
-  console.log('Conectado a la base de datos');
-});
-
-// Ruta de prueba
-app.get('/', (req, res) => {
-  res.send('¡API de gestión de tareas funcionando!');
-});
-
-// Iniciar servidor
-app.listen(5000, () => {
-  console.log('Servidor corriendo en puerto 5000');
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });
